@@ -14,7 +14,7 @@ public class GameUtils {
 
     @Environment(EnvType.CLIENT)
     public static void displayTextInGame(String text) {
-        if (text != null && !text.isEmpty() && text.matches("^[0-9a-zA-Z &_.!?$%^#/,\\[\\]()@]*$")) {
+        if (text != null && !text.isEmpty() && text.matches("^[0-9a-zA-Z &_.!?$%^#/,\\[\\]\\-()@]*$")) {
             MinecraftClient.getInstance().inGameHud.setOverlayMessage(text, false);
         } else {
             MinecraftClient.getInstance().inGameHud.setOverlayMessage("Mod error. In mod: " + RandomTeleportMod.MODID, false);

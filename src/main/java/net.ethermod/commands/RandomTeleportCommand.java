@@ -21,7 +21,7 @@ public class RandomTeleportCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
             commandDispatcher.register(CommandManager.literal("rtp")
-                    .then(CommandManager.argument("radius", integer(0,10000000))
+                    .then(CommandManager.argument("radius", integer(-1000000000,1000000000))
                             .executes(RandomTeleportCommand::execArgs))
                     .executes(RandomTeleportCommand::execNoArgs)
             );
@@ -30,14 +30,17 @@ public class RandomTeleportCommand {
     private static int execNoArgs(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
         PlayerEntity p = ctx.getSource().getPlayer();
         ServerWorld w = ctx.getSource().getWorld();
-        double delta_x = 10000 * ctx.getSource().getPlayer().getRand().nextDouble() + 1;
-        double delta_z = 10000 * ctx.getSource().getPlayer().getRand().nextDouble() + 1;
+        double delta_x = 10000 * ctx.getSource().getPlayer().getRand().nextGaussian() + 1;
+        double delta_z = 10000 * ctx.getSource().getPlayer().getRand().nextGaussian() + 1;
         double new_x = delta_x + p.x;
         double new_z = delta_z + p.z;
         double new_y = 0;
         int i = w.getSeaLevel();
         while (!w.isAir(new BlockPos(new_x, i++, new_z)) && new_y + w.getSeaLevel() < w.getHeight()) {
             new_y++;
+        }
+        if (w.isWaterAt(new BlockPos(new_x, i-2, new_z))) {
+            return execNoArgs(ctx);
         }
         PlayerUtils.teleport(ctx.getSource(), p, w, new_x, i, new_z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), p.yaw, p.pitch);
         String info = "Default radius set to 10000, spawning "+ctx.getSource().getPlayer().getDisplayName().asString()+" at [" + (int) new_x + "] [" + (int) p.y + "] [" + (int) new_z + "]";
@@ -49,14 +52,17 @@ public class RandomTeleportCommand {
         PlayerEntity p = ctx.getSource().getPlayer();
         ServerWorld w = ctx.getSource().getWorld();
         int r = getInteger(ctx, "radius");
-        double delta_x = r * ctx.getSource().getPlayer().getRand().nextDouble() + 1;
-        double delta_z = r * ctx.getSource().getPlayer().getRand().nextDouble() + 1;
+        double delta_x = r * ctx.getSource().getPlayer().getRand().nextGaussian() + 1;
+        double delta_z = r * ctx.getSource().getPlayer().getRand().nextGaussian() + 1;
         double new_x = delta_x + p.x;
         double new_z = delta_z + p.z;
         double new_y = 0;
         int i = w.getSeaLevel();
         while (!w.isAir(new BlockPos(new_x, i++, new_z)) && new_y + w.getSeaLevel() < w.getHeight()) {
             new_y++;
+        }
+        if (w.isWaterAt(new BlockPos(new_x, i-2, new_z))) {
+            return execArgs(ctx);
         }
         PlayerUtils.teleport(ctx.getSource(), p, w, new_x, i, new_z, EnumSet.noneOf(PlayerPositionLookS2CPacket.Flag.class), p.yaw, p.pitch);
         String info = "Radius set to " + r + ", spawning "+ctx.getSource().getPlayer().getDisplayName().asString()+" at [" + (int) new_x + "] [" + (int) p.y + "] [" + (int) new_z + "]";
