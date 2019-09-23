@@ -1,16 +1,19 @@
-# Fabric Example Mod
+# Random Teleport Command
 
-## Setup
+## Usage
 
-1. Edit build.gradle and mod.json to suit your needs.
-    * The "mixins" object can be removed from mod.json if you do not need to use mixins.
-    * Please replace all occurences of "modid" with your own mod ID - sometimes, a different string may also suffice.
-2. Run the following command:
-
+1. 
 ```
-./gradlew idea
+/rtp
 ```
+Default no args, will spawn the player at a gaussian random location within 0 to 10000 block radius
 
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+2. 
+```
+/rtp <radius>
+```
+radius integer argument, will spawn the player at a gaussian random location 0 to radius blocks away.
+E.g.
+```
+/rtp 9999999
+```
