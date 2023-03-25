@@ -1,4 +1,5 @@
 # Random Teleport Command
+[![](https://jitpack.io/v/javachaos/randomteleport.svg)](https://jitpack.io/#javachaos/randomteleport)
 
 ## Usage
 
